@@ -1,0 +1,18 @@
+---
+repository:
+  description: Quick summary about the repository or library. What is 
+  has_projects: false
+  has_wiki: true
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  delete_branch_on_merge: true
+
+branches:
+  - name: main
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+
+      enforce_admins: true
