@@ -1,0 +1,28 @@
+{
+  "name": "@stackbuilders/semantic-release-hackage",
+  "version": "0.0.0",
+  "description": "A sematic-release plugin to publish Haskell packages to Hackage",
+  "repository": "git@github.com:stackbuilders/semantic-release-hackage.git",
+  "homepage": "https://github.com/stackbuilders/semantic-release-hackage",
+  "bugs": "https://github.com/stackbuilders/semantic-release-hackage/issues",
+  "author": "Stack Builders <info@stackbuilders.com> (https://github.com/stackbuilders)",
+  "license": "MIT",
+  "keywords": [
+    "semantic-release",
+    "hackage",
+    "haskell"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "compile": "tsc"
+  },
+  "packageManager": "yarn@3.6.0",
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
