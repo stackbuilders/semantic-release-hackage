@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/mocharc",
+  "exit": true,
+  "extension": ["ts"],
+  "recursive": true,
+  "require": ["ts-node/register", "test/setup.ts"],
+  "slow": 1000,
+  "spec": ["test/**/*.test.*"],
+  "timeout": 5000
+}
