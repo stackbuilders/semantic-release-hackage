@@ -1,8 +1,6 @@
 // Lifecycle configurations
 
-/* asdf asdfasdfasdf asdf asdfasdfasdf */
-
-/* import Sinon from "sinon";
+import Sinon from "sinon";
 
 export const mochaHooks: () => Mocha.RootHookObject = () => {
   return {
@@ -10,4 +8,4 @@ export const mochaHooks: () => Mocha.RootHookObject = () => {
       Sinon.restore();
     },
   };
-}; */
+};
