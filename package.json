@@ -1,0 +1,40 @@
+{
+  "name": "@stackbuilders/semantic-release-hackage",
+  "version": "0.0.0",
+  "description": "A sematic-release plugin to publish Haskell packages to Hackage",
+  "repository": "git@github.com:stackbuilders/semantic-release-hackage.git",
+  "homepage": "https://github.com/stackbuilders/semantic-release-hackage",
+  "bugs": "https://github.com/stackbuilders/semantic-release-hackage/issues",
+  "author": "Stack Builders <info@stackbuilders.com> (https://github.com/stackbuilders)",
+  "license": "MIT",
+  "keywords": [
+    "semantic-release",
+    "hackage",
+    "haskell"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "compile": "tsc",
+    "lint": "eslint .",
+    "test": "NODE_ENV=test mocha"
+  },
+  "packageManager": "yarn@3.6.0",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.41.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-etc": "^2.0.3",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsdoc": "^46.2.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
