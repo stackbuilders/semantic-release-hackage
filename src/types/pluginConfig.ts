@@ -1,5 +1,6 @@
 interface PluginConfig {
-  // semantic-release-hackage interface
+  hackageCandURL: string;
+  hackageDocumURL: string;
 }
 
 export default PluginConfig;
