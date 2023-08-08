@@ -26,11 +26,17 @@ const validateToken = async (hackageLibURL: string, cabalFilename: string, hacka
 
 const verifyConditions = async (pluginConfig: PluginConfig, { logger }: Context): Promise<void> => {
   const { HACKAGE_TOKEN } = process.env;
+  const { cabalFilename, hackagePackageURL } = pluginConfig;
 
   logger.log("Check environment variables");
   if (!HACKAGE_TOKEN) {
     thrownEnvVarError("HACKAGE_TOKEN");
+    return;
   }
+
+  logger.log("Verify authentication with hackage");
+  await validateToken(hackagePackageURL, cabalFilename, HACKAGE_TOKEN);
+  logger.log("Token information for the specified package seem to be valid.");
 };
 
 export default verifyConditions;
