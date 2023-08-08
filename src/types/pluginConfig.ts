@@ -1,6 +1,8 @@
 interface PluginConfig {
-  hackageCandURL: string;
-  hackageDocumURL: string;
+  cabalFilename: string;
+  hackageCandidateURL: string;
+  hackageDocumentURL: string;
+  hackagePackageURL: string;
 }
 
 export default PluginConfig;
