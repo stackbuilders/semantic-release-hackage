@@ -7,6 +7,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "incremental": true,
+    "module": "CommonJS",
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -24,5 +25,9 @@
     "strictPropertyInitialization": true,
     "target": "ES6"
   },
-  "exclude": [".yarn", "build/*", "dist/*", "node_modules/*"]
+  "exclude": [".yarn", "build/*", "dist/*", "node_modules/*"],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
+  }
 }
