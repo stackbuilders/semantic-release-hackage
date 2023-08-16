@@ -1,9 +1,8 @@
 import { Context } from "semantic-release";
 
-import type PluginConfig from "./types/pluginConfig";
+import { PluginConfig } from "./types/pluginConfig";
 
-const prepare = (pluginConfig: PluginConfig, context: Context): void => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const prepare = (_pluginConfig: PluginConfig, _context: Context): void => {
   // prepare logic
 };
-
-export default prepare;

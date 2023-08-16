@@ -1,3 +1,3 @@
-export { default as prepare } from "./prepare";
-export { default as publish } from "./publish";
-export { default as verifyConditions } from "./verifyConditions";
+export { prepare } from "./prepare";
+export { publish } from "./publish";
+export { verifyConditions } from "./verifyConditions";
