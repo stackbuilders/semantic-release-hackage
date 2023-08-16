@@ -1,42 +1,40 @@
-import got, { GotError } from "got";
+import axios, { AxiosError } from "axios";
 import { Context } from "semantic-release";
 
-import type PluginConfig from "./types/pluginConfig";
+import { PluginConfig } from "./types/pluginConfig";
+import { EnvVarError } from "./utils/EnvVarError";
+import { HACKAGE_PACKAGE_URL } from "./utils/constants";
 
-const configMessage = "Check the README.md for config info.";
-
-const thrownEnvVarError = (variable: string): Error => {
-  throw new Error(`Environment variable not found: ${variable}. ${configMessage}`);
-};
-
-const validateToken = async (hackageLibURL: string, cabalFilename: string, hackageToken: string): Promise<number> => {
-  const hackageCabalFileURL = `${hackageLibURL}/${cabalFilename}`;
+export const validateToken = async (
+  packageName: string,
+  cabalFileURL: string,
+  hackageToken: string,
+): Promise<number> => {
+  const hackageCabalFileURL = `${HACKAGE_PACKAGE_URL}/${packageName}/${cabalFileURL}`;
   try {
-    const response = await got(hackageCabalFileURL, {
+    const response = await axios(hackageCabalFileURL, {
       headers: { Authorization: `X-ApiKey ${hackageToken}` },
       method: "PUT",
     });
 
-    return response.statusCode;
+    return response.status;
   } catch (err: unknown) {
-    const error = err as GotError;
+    const error = err as AxiosError;
     throw new Error(`You do not have access to PUT a file to ${hackageCabalFileURL}, ${error.message}`);
   }
 };
 
-const verifyConditions = async (pluginConfig: PluginConfig, { logger }: Context): Promise<void> => {
+export const verifyConditions = async (pluginConfig: PluginConfig, context: Context): Promise<void> => {
   const { HACKAGE_TOKEN } = process.env;
-  const { cabalFilename, hackagePackageURL } = pluginConfig;
+  const { packageName, cabalFile } = pluginConfig;
+  const cabalFileURL = cabalFile ? `${cabalFile}.cabal` : `${packageName.toLowerCase()}.cabal`;
 
-  logger.log("Check environment variables");
+  context.logger.log("Check environment variables");
   if (!HACKAGE_TOKEN) {
-    thrownEnvVarError("HACKAGE_TOKEN");
-    return;
+    throw new EnvVarError("HACKAGE_TOKEN");
   }
 
-  logger.log("Verify authentication with hackage");
-  await validateToken(hackagePackageURL, cabalFilename, HACKAGE_TOKEN);
-  logger.log("Token information for the specified package seem to be valid.");
+  context.logger.log("Verify authentication with hackage");
+  await validateToken(packageName, cabalFileURL, HACKAGE_TOKEN);
+  context.logger.log("Token information for the specified package seem to be valid.");
 };
-
-export default verifyConditions;
