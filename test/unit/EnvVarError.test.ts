@@ -7,11 +7,6 @@ describe("EnvVarError", () => {
     const variableName = "TOKEN";
     const expectedError = `Environment variable not found: ${variableName}. Check the README.md for config info.`;
 
-    try {
-      throw new EnvVarError(variableName);
-    } catch (e: unknown) {
-      const error = e as Error;
-      expect(error.message).toBeEqual(expectedError);
-    }
+    expect(new EnvVarError(variableName)).toHaveName("EnvVarError").toHaveMessage(expectedError);
   });
 });
