@@ -3,7 +3,7 @@
   "exit": true,
   "extension": ["ts"],
   "recursive": true,
-  "require": ["ts-node/register", "test/setup.ts"],
+  "require": ["ts-node/register"],
   "slow": 1000,
   "spec": ["test/**/*.test.*"],
   "timeout": 5000
