@@ -1,20 +1,12 @@
-import { execa } from "execa";
 import { Context } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
+import { runExecCommand } from "./utils/exec";
 
 import { readFile, writeFile } from "fs/promises";
 import { resolve } from "path";
 
-const runSDistCommand = async (): Promise<void> => {
-  try {
-    await execa("cabal", ["sdist"]);
-  } catch (err) {
-    throw Error("failed to run cabal sdist command");
-  }
-};
-
-const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
+export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
   const pattern = /^version:\s+\S+/m;
   const versionContents = await readFile(fullCabalPath, "utf8");
   const newContents = versionContents.replace(pattern, `version: ${newVersion}`);
@@ -39,7 +31,14 @@ export const prepare = async (
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
   logger.log("Running cabal sdist command");
-  await runSDistCommand();
+  const { error, output } = await runExecCommand("cabal sdist");
+
+  if (error === "") {
+    logger.log(output);
+  } else {
+    logger.error(error);
+    return;
+  }
 
   logger.log("Prepare done!");
 };
