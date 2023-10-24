@@ -1,36 +1,31 @@
-import { execa } from "execa";
 import { Context } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
+import { runExecCommand } from "./utils/exec";
+import { getCabalFilename } from "./utils/prepare";
 
 import { readFile, writeFile } from "fs/promises";
 import { resolve } from "path";
 
-const runSDistCommand = async (): Promise<void> => {
-  try {
-    await execa("cabal", ["sdist"]);
-  } catch (err) {
-    throw Error("failed to run cabal sdist command");
-  }
-};
-
-const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
+export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
   const pattern = /^version:\s+\S+/m;
   const versionContents = await readFile(fullCabalPath, "utf8");
   const newContents = versionContents.replace(pattern, `version: ${newVersion}`);
   await writeFile(fullCabalPath, newContents, "utf8");
 };
 
-export const prepare = async (
-  { packageName, cabalFile }: PluginConfig,
-  { nextRelease, logger }: Context,
-): Promise<void> => {
-  const cabalFileName = cabalFile ?? `${packageName.toLowerCase()}.cabal`;
-  const version = nextRelease?.version;
+export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger }: Context): Promise<void> => {
+  const cabalFileName = cabalFile ?? getCabalFilename();
+  const { version } = nextRelease ?? {};
 
   logger.log("Check new version");
   if (!version) {
-    throw new Error("Could not determine the version from semantic release");
+    throw new Error("Could not determine the version from semantic release. Check the plugin configuration");
+  }
+
+  logger.log("Check cabal file");
+  if (!cabalFileName) {
+    throw new Error("Could not determine the cabal filename. Check the plugin configuration");
   }
 
   const fullCabalPath = resolve("./", cabalFileName);
@@ -39,7 +34,13 @@ export const prepare = async (
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
   logger.log("Running cabal sdist command");
-  await runSDistCommand();
+  const { error, output } = await runExecCommand("cabal sdist");
 
+  if (error) {
+    logger.error(error);
+    throw new Error(error);
+  }
+
+  logger.log(output);
   logger.log("Prepare done!");
 };
