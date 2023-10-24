@@ -16,13 +16,16 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
 
 export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger }: Context): Promise<void> => {
   const cabalFileName = cabalFile ?? getCabalFilename();
-  const version = nextRelease?.version;
+  const { version } = nextRelease ?? {};
 
   logger.log("Check new version");
-  if (!version || !cabalFileName) {
-    throw new Error(
-      "Could not determine the version from semantic release and/or the cabal filename. Check the plugin configuration",
-    );
+  if (!version) {
+    throw new Error("Could not determine the version from semantic release. Check the plugin configuration");
+  }
+
+  logger.log("Check cabal file");
+  if (!cabalFileName) {
+    throw new Error("Could not determine the cabal filename. Check the plugin configuration");
   }
 
   const fullCabalPath = resolve("./", cabalFileName);
@@ -33,12 +36,11 @@ export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger
   logger.log("Running cabal sdist command");
   const { error, output } = await runExecCommand("cabal sdist");
 
-  if (error === "") {
-    logger.log(output);
-  } else {
+  if (error) {
     logger.error(error);
-    return;
+    throw new Error(error);
   }
 
+  logger.log(output);
   logger.log("Prepare done!");
 };
