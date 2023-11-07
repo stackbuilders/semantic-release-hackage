@@ -4,9 +4,15 @@ import { Context } from "semantic-release";
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
 
-const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): Promise<number | undefined> => {
-  const url = "https://hackage.haskell.org/packages/candidates";
+const HACKAGE_PACKAGES_URL = "https://hackage.haskell.org/packages/";
+const CANDIDATES = "candidates/";
 
+const postReleaseCandidate = async (
+  sdistPath: string,
+  packageName: string,
+  hackageToken?: string,
+): Promise<number | undefined> => {
+  const url = `${HACKAGE_PACKAGES_URL}/${packageName}/${CANDIDATES}`;
   try {
     const headers = {
       Accept: "text/plain",
@@ -19,17 +25,12 @@ const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): P
     const req = await axios.post(url, formData, { headers });
 
     return req.status;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      throw new Error(`You do not have access to POST a file to ${url}, ${e.message}`);
-    }
-    return;
+  } catch (e: unknown) {
+    throw new Error(`You do not have access to POST a file to ${url}, ${String(e)}`);
   }
 };
 
 export const publish = async ({ packageName }: PluginConfig, { logger }: Context): Promise<void> => {
-  const { HACKAGE_TOKEN } = process.env;
-
   logger.log("Getting sdist path");
   const { error, output } = await runExecCommand(`ls dist-newstyle/sdist/${packageName}-*.tar.gz`);
 
@@ -39,7 +40,7 @@ export const publish = async ({ packageName }: PluginConfig, { logger }: Context
   }
 
   logger.log("Post release candidate in hackage");
-  const status = await postReleaseCandidate(output.trim(), HACKAGE_TOKEN);
+  const status = await postReleaseCandidate(output.trim(), packageName, process.env.HACKAGE_TOKEN);
 
   if (status !== 200) {
     throw new Error(`Cannot post release candidate now, status: ${status}`);
