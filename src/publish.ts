@@ -4,7 +4,7 @@ import { Context } from "semantic-release";
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
 
-const HACKAGE_PACKAGES_URL = "https://hackage.haskell.org/packages/";
+const HACKAGE_PACKAGES_URL = "https://hackage.haskell.org/package/";
 const CANDIDATES = "candidates/";
 
 const postReleaseCandidate = async (
