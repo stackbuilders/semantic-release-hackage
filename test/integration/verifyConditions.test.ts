@@ -2,7 +2,7 @@ import { expect } from "@stackbuilders/assertive-ts";
 
 import { PluginConfig } from "../../src/types/pluginConfig";
 import { EnvVarError } from "../../src/utils/EnvVarError";
-import { verifyConditions } from "../../src/verifyConditions"; // Replace with the actual module path
+import { verifyConditions } from "../../src/verifyConditions";
 import { context } from "../utils";
 
 const pluginConfig: PluginConfig = {
