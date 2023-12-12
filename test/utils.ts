@@ -71,3 +71,8 @@ export const context: Context = {
     version: "1.0.0",
   },
 };
+
+export const contextWithoutRelease: Context = {
+  ...context,
+  nextRelease: undefined,
+};
