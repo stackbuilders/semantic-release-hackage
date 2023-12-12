@@ -1,7 +1,6 @@
 import { expect } from "@stackbuilders/assertive-ts";
 
 import { readAndWriteNewCabal, versionPattern } from "../../src/prepare";
-import { runExecCommand } from "../../src/utils/exec";
 
 import { readFile, writeFile } from "fs/promises";
 
@@ -10,12 +9,13 @@ describe("readAndWriteNewCabal", () => {
   const fakeNewVersion = "0.0.7";
 
   beforeEach(async () => {
-    const cabalContent = "name: test-1-package\nversion: 0.1.0";
+    const cabalContent = "name: test-1-package\nversion: 0.0.1";
     await writeFile(fakeCabalPath, cabalContent, "utf8");
   });
 
   afterEach(async () => {
-    await runExecCommand(`rm -f ${fakeCabalPath}`);
+    const cabalContent = "name: test-1-package\nversion: 0.0.1";
+    await writeFile(fakeCabalPath, cabalContent, "utf8");
   });
 
   it("updates the version in the cabal file fixture", async () => {
