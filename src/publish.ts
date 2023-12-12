@@ -4,10 +4,10 @@ import { Context } from "semantic-release";
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
 
-const HACKAGE_PACKAGES_URL = "https://hackage.haskell.org/package";
-const CANDIDATES = "candidates/";
+export const HACKAGE_PACKAGES_URL = "https://hackage.haskell.org/package";
+export const CANDIDATES = "candidates/";
 
-const postReleaseCandidate = async (
+export const postReleaseCandidate = async (
   sdistPath: string,
   packageName: string,
   hackageToken?: string,
@@ -26,7 +26,7 @@ const postReleaseCandidate = async (
 
     return req.status;
   } catch (e: unknown) {
-    throw new Error(`You do not have access to POST a file to ${url}, ${String(e)}`);
+    throw new Error(`You do not have access to POST a file to ${url}, ${String((e as Error).message)}`);
   }
 };
 
