@@ -10,8 +10,8 @@ const pluginConfig: PluginConfig = {
 };
 
 describe("prepare", () => {
-  it.skip("throws error when next release is not defined", () => {
-    expect(() => prepare(pluginConfig, contextWithoutRelease)).toThrowError();
+  it.skip("throws an error when next release is not defined", () => {
+    expect(() => prepare(pluginConfig, contextWithoutRelease)).toThrow();
   });
 
   it("does not throw an error when next release is defined", () => {
