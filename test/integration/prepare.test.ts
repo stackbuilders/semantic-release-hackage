@@ -25,7 +25,7 @@ describe("prepare", () => {
 
   context("when cabal file name does not exists", () => {
     it("rejects the promise because of the cabal file", async () => {
-      await expect(prepare(pluginConfigWithoutCabal, contextWithoutRelease)).toBeRejected();
+      await expect(prepare(pluginConfigWithoutCabal, semanticContext)).toBeRejected();
     });
   });
 
