@@ -1,9 +1,9 @@
-import { expect } from "@stackbuilders/assertive-ts";
+import { expect } from "@assertive-ts/core";
 
 import { PluginConfig } from "../../src/types/pluginConfig";
 import { EnvVarError } from "../../src/utils/EnvVarError";
 import { verifyConditions } from "../../src/verifyConditions";
-import { semanticContext } from "../utils";
+import { semanticContext } from "../helpers/context";
 
 const pluginConfig: PluginConfig = {
   cabalFile: "test-1-package.cabal",

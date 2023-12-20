@@ -1,11 +1,10 @@
-import { expect } from "@stackbuilders/assertive-ts";
+import { expect } from "@assertive-ts/core";
 import Sinon from "sinon";
 
 import { prepare } from "../../src/prepare";
 import { PluginConfig } from "../../src/types/pluginConfig";
-// eslint-disable-next-line import/no-namespace
 import * as exec from "../../src/utils/exec";
-import { semanticContext, contextWithoutRelease } from "../utils";
+import { semanticContext, contextWithoutRelease } from "../helpers/context";
 
 const pluginConfig: PluginConfig = {
   cabalFile: "test/fixtures/test-1-package.cabal",

@@ -188,7 +188,6 @@
     ],
     "import/no-duplicates": "error",
     "import/no-import-module-exports": "error",
-    "import/no-namespace": "error",
     "import/no-relative-packages": "error",
     "import/no-unresolved": "error",
     "import/no-useless-path-segments": "error",

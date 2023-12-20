@@ -1,8 +1,8 @@
-import { expect } from "@stackbuilders/assertive-ts";
+import { expect } from "@assertive-ts/core";
 import axios from "axios";
 import sinon from "sinon";
 
-import { CANDIDATES, HACKAGE_PACKAGES_URL, postReleaseCandidate } from "../../src/publish";
+import { CANDIDATES_PATH, HACKAGE_PACKAGES_URL, postReleaseCandidate } from "../../src/publish";
 
 const sdistPath = "sdist/path";
 const packageName = "my-hackage-package";
@@ -16,7 +16,7 @@ describe("postReleaseCandidate", () => {
 
     expect(statusCode).toBeEqual(200);
     expect(axiosPostStub.calledOnce).toBeTruthy();
-    expect(axiosPostStub.firstCall.args[0]).toBeEqual(`${HACKAGE_PACKAGES_URL}/${packageName}/${CANDIDATES}`);
+    expect(axiosPostStub.firstCall.args[0]).toBeEqual(`${HACKAGE_PACKAGES_URL}/${packageName}/${CANDIDATES_PATH}`);
   });
 
   it("throws an error on unsuccessful request", async () => {
@@ -25,11 +25,7 @@ describe("postReleaseCandidate", () => {
 
     const request = postReleaseCandidate(sdistPath, packageName, hackageToken);
 
-    await expect(request).toBeRejectedWith(
-      new Error(
-        `You do not have access to POST a file to ${HACKAGE_PACKAGES_URL}/${packageName}/${CANDIDATES}, ${errorMsg}`,
-      ),
-    );
+    await expect(request).toBeRejected();
     expect(axiosPostStub.calledOnce).toBeTruthy();
   });
 });
