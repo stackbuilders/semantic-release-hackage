@@ -22,8 +22,15 @@ Semantic-release is widely used in the development world but have not been imple
 
 ## Install
 
+With npm:
+
 ```sh
 npm install semantic-release-hackage -D
+```
+
+With yarn:
+
+```sh
 yarn add semantic-release-hackage --dev
 ```
 
@@ -36,17 +43,17 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    "semantic-release-hackage",
+    "semantic-release-hackage"
   ]
 }
 ```
 
 ## Configuration
 
-| Property | Description | Default |
-| ----------------- | ----------------- | ----------------- |
-| `cabalFile`     | Cabal file name | Plugin will read your root `.cabal` file name  |
-| `packageName`         | Package name in Hackage|                                                                          |
+| Property      | Description             | Default                                       |
+| ------------- | ----------------------- | --------------------------------------------- |
+| `cabalFile`   | Cabal file name         | Plugin will read your root `.cabal` file name |
+| `packageName` | Package name in Hackage |                                               |
 
 ## License
 
