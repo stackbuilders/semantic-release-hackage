@@ -41,7 +41,7 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
         "etc/throw-error": "off",
-        "@typescript-eslint/no-namespace": "off"
+        "import/no-namespace": "off"
       }
     },
     {
@@ -49,7 +49,7 @@
       "rules": {
         "@typescript-eslint/ban-ts-comment": ["error", { "ts-expect-error": false }],
         "etc/throw-error": "off",
-        "@typescript-eslint/no-namespace": "off"
+        "import/no-namespace": "off"
       }
     },
     {
