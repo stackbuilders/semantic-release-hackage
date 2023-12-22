@@ -40,14 +40,16 @@
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/restrict-template-expressions": "off",
-        "etc/throw-error": "off"
+        "etc/throw-error": "off",
+        "@typescript-eslint/no-namespace": "off"
       }
     },
     {
       "files": "*.typetest.ts?(x)",
       "rules": {
         "@typescript-eslint/ban-ts-comment": ["error", { "ts-expect-error": false }],
-        "etc/throw-error": "off"
+        "etc/throw-error": "off",
+        "@typescript-eslint/no-namespace": "off"
       }
     },
     {
@@ -117,7 +119,7 @@
       }
     ],
     "@typescript-eslint/no-misused-new": "error",
-    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-namespace": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/no-redundant-type-constituents": "error",
     "@typescript-eslint/no-shadow": ["error", { "hoist": "all" }],
