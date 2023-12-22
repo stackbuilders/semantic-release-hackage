@@ -7,10 +7,11 @@ import { getCabalFilename } from "./utils/prepare";
 import { readFile, writeFile } from "fs/promises";
 import { resolve } from "path";
 
+export const VERSION_PATTERN = /version:\s+(\S+)/;
+
 export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
-  const pattern = /^version:\s+\S+/m;
   const versionContents = await readFile(fullCabalPath, "utf8");
-  const newContents = versionContents.replace(pattern, `version: ${newVersion}`);
+  const newContents = versionContents.replace(VERSION_PATTERN, `version: ${newVersion}`);
   await writeFile(fullCabalPath, newContents, "utf8");
 };
 
