@@ -1,4 +1,4 @@
-import { Context } from "semantic-release";
+import { PrepareContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
@@ -15,7 +15,7 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
   await writeFile(fullCabalPath, newContents, "utf8");
 };
 
-export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger }: Context): Promise<void> => {
+export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger }: PrepareContext): Promise<void> => {
   const cabalFileName = cabalFile ?? getCabalFilename();
   const { version } = nextRelease ?? {};
 

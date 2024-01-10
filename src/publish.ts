@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Context } from "semantic-release";
+import { BaseContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
@@ -30,7 +30,7 @@ export const postReleaseCandidate = async (
   }
 };
 
-export const publish = async ({ packageName }: PluginConfig, { logger }: Context): Promise<void> => {
+export const publish = async ({ packageName }: PluginConfig, { logger }: BaseContext): Promise<void> => {
   logger.log("Getting sdist path");
   const { error, output } = await runExecCommand(`ls dist-newstyle/sdist/${packageName}-*.tar.gz`);
 
