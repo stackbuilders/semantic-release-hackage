@@ -4,7 +4,7 @@ import Sinon from "sinon";
 import { prepare } from "../../src/prepare";
 import { PluginConfig } from "../../src/types/pluginConfig";
 import * as exec from "../../src/utils/exec";
-import { semanticContext, contextWithoutRelease } from "../helpers/context";
+import { semanticVerifyReleaseContext } from "../helpers/context";
 
 const pluginConfig: PluginConfig = {
   cabalFile: "test/fixtures/test-1-package.cabal",
@@ -16,15 +16,9 @@ const pluginConfigWithoutCabal: PluginConfig = {
 };
 
 describe("prepare", () => {
-  context("when release does not exists", () => {
-    it("rejects the promise because of the release version", async () => {
-      await expect(prepare(pluginConfig, contextWithoutRelease)).toBeRejected();
-    });
-  });
-
   context("when cabal file name does not exists", () => {
     it("rejects the promise because of the cabal file", async () => {
-      await expect(prepare(pluginConfigWithoutCabal, semanticContext)).toBeRejected();
+      await expect(prepare(pluginConfigWithoutCabal, semanticVerifyReleaseContext)).toBeRejected();
     });
   });
 
@@ -33,7 +27,7 @@ describe("prepare", () => {
       const runExecCommandStub = Sinon.stub();
       runExecCommandStub.withArgs("cabal sdist").resolves({ error: null, output: "Mocked output" });
       Sinon.replace(exec, "runExecCommand", runExecCommandStub);
-      await expect(prepare(pluginConfig, semanticContext)).toBeResolved();
+      await expect(prepare(pluginConfig, semanticVerifyReleaseContext)).toBeResolved();
     });
   });
 });
