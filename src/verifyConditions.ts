@@ -11,5 +11,5 @@ export const verifyConditions = (_pluginConfig: PluginConfig, { logger }: BaseCo
     throw new EnvVarError("HACKAGE_TOKEN");
   }
 
-  logger.log("Verify conditions done!");
+  logger.success("Verify conditions done!");
 };

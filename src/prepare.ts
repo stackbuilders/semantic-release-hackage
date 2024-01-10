@@ -43,5 +43,5 @@ export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger
   }
 
   logger.log(output);
-  logger.log("Prepare done!");
+  logger.success("Prepare done!");
 };

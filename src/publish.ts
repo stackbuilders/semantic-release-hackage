@@ -46,5 +46,5 @@ export const publish = async ({ packageName }: PluginConfig, { logger }: BaseCon
     throw new Error(`Cannot post release candidate now, status: ${status}`);
   }
 
-  logger.log("Publish done!");
+  logger.success("Publish done!");
 };
