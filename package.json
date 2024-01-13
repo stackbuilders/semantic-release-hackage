@@ -52,5 +52,10 @@
   },
   "peerDependencies": {
     "semantic-release": ">=22.0.0"
+  },
+  "peerDependenciesMeta": {
+    "semantic-release": {
+      "optional": false
+    }
   }
 }
