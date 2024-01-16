@@ -57,5 +57,9 @@
     "semantic-release": {
       "optional": false
     }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
