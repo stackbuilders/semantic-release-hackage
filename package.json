@@ -46,6 +46,7 @@
     "eslint-plugin-sonarjs": "^0.23.0",
     "mocha": "^10.2.0",
     "semantic-release": "^22.0.12",
+    "semantic-release-yarn": "^3.0.2",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
