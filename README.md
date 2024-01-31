@@ -43,17 +43,25 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    "semantic-release-hackage"
+    [
+      "semantic-release-hackage",
+      {
+        "cabalFile": "aeson",
+        "packageName": "aeson",
+        "versionPrefix": "0."
+      }
+    ]
   ]
 }
 ```
 
 ## Configuration
 
-| Property      | Description             | Default                                       |
-| ------------- | ----------------------- | --------------------------------------------- |
-| `cabalFile`   | Cabal file name         | Plugin will read your root `.cabal` file name |
-| `packageName` | Package name in Hackage |                                               |
+| Property        | Description                             | Default                                       | Required |
+| --------------- | --------------------------------------- | --------------------------------------------- | -------- |
+| `cabalFile`     | Cabal file name                         | Plugin will read your root `.cabal` file name | `false`  |
+| `packageName`   | Package name in Hackage                 |                                               | `true`   |
+| `versionPrefix` | For supporting Haskell package versions |                                               | `false`  |
 
 ## License
 
