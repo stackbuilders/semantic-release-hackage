@@ -15,7 +15,10 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
   await writeFile(fullCabalPath, newContents, "utf8");
 };
 
-export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger }: PrepareContext): Promise<void> => {
+export const prepare = async (
+  { cabalFile, versionPrefix }: PluginConfig,
+  { nextRelease, logger }: PrepareContext,
+): Promise<void> => {
   const cabalFileName = cabalFile ?? getCabalFilename();
   const { version } = nextRelease ?? {};
 
@@ -30,8 +33,9 @@ export const prepare = async ({ cabalFile }: PluginConfig, { nextRelease, logger
   }
 
   const fullCabalPath = resolve("./", cabalFileName);
+  const fullVersion = versionPrefix ? versionPrefix + version : version;
   logger.log("Reading .cabal file");
-  await readAndWriteNewCabal(fullCabalPath, version);
+  await readAndWriteNewCabal(fullCabalPath, fullVersion);
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
   logger.log("Running cabal sdist command");
