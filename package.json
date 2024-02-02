@@ -27,7 +27,7 @@
   },
   "packageManager": "yarn@4.0.2",
   "dependencies": {
-    "axios": "^1.6.5"
+    "axios": "^1.6.7"
   },
   "devDependencies": {
     "@assertive-ts/core": "^2.0.0",
@@ -35,17 +35,17 @@
     "@types/semantic-release": "^20.0.6",
     "@types/signale": "^1.4.7",
     "@types/sinon": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
     "axios-mock-adapter": "^1.22.0",
     "eslint": "^8.56.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-etc": "^2.0.3",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^48.0.2",
+    "eslint-plugin-jsdoc": "^48.0.4",
     "eslint-plugin-sonarjs": "^0.23.0",
     "mocha": "^10.2.0",
-    "semantic-release": "^22.0.12",
+    "semantic-release": "^23.0.0",
     "semantic-release-yarn": "^3.0.2",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.2",
