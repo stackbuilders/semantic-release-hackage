@@ -16,7 +16,7 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
 };
 
 export const prepare = async (
-  { cabalFile, versionPrefix }: PluginConfig,
+  { cabalFile, versionPrefix = "" }: PluginConfig,
   { nextRelease, logger }: PrepareContext,
 ): Promise<void> => {
   const cabalFileName = cabalFile ?? getCabalFilename();
@@ -33,7 +33,7 @@ export const prepare = async (
   }
 
   const fullCabalPath = resolve("./", cabalFileName);
-  const fullVersion = versionPrefix ? versionPrefix + version : version;
+  const fullVersion = `${versionPrefix}${version}`;
   logger.log("Reading .cabal file");
   await readAndWriteNewCabal(fullCabalPath, fullVersion);
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);

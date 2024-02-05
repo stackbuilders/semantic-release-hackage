@@ -38,7 +38,7 @@ describe("prepare", () => {
   });
 
   context("when prepare has version, cabal name and version prefix", () => {
-    it("execs the cabal sdist command and resolves prepare fn", async () => {
+    it("prepends the prefix to the version, execs the cabal sdist command, and resolves prepare fn", async () => {
       const runExecCommandStub = Sinon.stub();
       runExecCommandStub.withArgs("cabal sdist").resolves({ error: null, output: "Mocked output" });
       Sinon.replace(exec, "runExecCommand", runExecCommandStub);

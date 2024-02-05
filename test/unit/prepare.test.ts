@@ -13,20 +13,24 @@ describe("readAndWriteNewCabal", () => {
     await writeFile(fakeCabalPath, cabalContent, "utf8");
   });
 
-  it("updates the version in the cabal file fixture when version is semantic", async () => {
-    await readAndWriteNewCabal(fakeCabalPath, fakeNewVersion);
+  context("when version is semantic", () => {
+    it("updates the version in the cabal file fixture", async () => {
+      await readAndWriteNewCabal(fakeCabalPath, fakeNewVersion);
 
-    const modifiedContents = await readFile(fakeCabalPath, "utf8");
+      const modifiedContents = await readFile(fakeCabalPath, "utf8");
 
-    expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.7");
+      expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.7");
+    });
   });
 
-  it("updates the version in the cabal file fixture when version is not semantic", async () => {
-    const versionPrefix = "0.";
-    await readAndWriteNewCabal(fakeCabalPath, versionPrefix + fakeNewVersion);
+  context("when version is not semantic", () => {
+    it("updates the version in the cabal file fixture", async () => {
+      const versionPrefix = "0.";
+      await readAndWriteNewCabal(fakeCabalPath, versionPrefix + fakeNewVersion);
 
-    const modifiedContents = await readFile(fakeCabalPath, "utf8");
+      const modifiedContents = await readFile(fakeCabalPath, "utf8");
 
-    expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.0.7");
+      expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.0.7");
+    });
   });
 });

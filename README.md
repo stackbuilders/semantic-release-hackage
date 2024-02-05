@@ -46,8 +46,8 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
     [
       "semantic-release-hackage",
       {
-        "cabalFile": "aeson",
-        "packageName": "aeson",
+        "cabalFile": "yourcabalfilename",
+        "packageName": "yourpackagename",
         "versionPrefix": "0."
       }
     ]
@@ -63,6 +63,19 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 | `packageName`   | Package name in Hackage                 |                                               | `true`   |
 | `versionPrefix` | For supporting Haskell package versions |                                               | `false`  |
 
+### Why adding a `versionPrefix` configuration?
+
+Haskell projects use a different way of versioning (A.B.C.D) than semantic versioning, you could think that since this plugin uses semantic-release, you have to move from your preview versioning way but thanks to the `versionPrefix` you could keep the usage of the 4 digits in your version.
+
+This is just an optional feature to enable backward compatibility when starting to use this plugin.
+
+We strongly recommend moving to semantic-versioning but if you cannot, the string `versionPrefix` can save the day.
+
+For example, if you have the version number `0.2.0.7` and want to create a new release for a new feature, semantic-release is going to infer the next version as `2.1.0`, you can keep your previous versioning adding the  
+```
+"versionPrefix" : "0."
+```
+And the plugin will add the `versionPrefix` to the new version, so your final version will be `0.2.1.0`.
 ## License
 
 MIT, see [the LICENSE file](LICENSE).
