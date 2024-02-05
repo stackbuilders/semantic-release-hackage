@@ -33,4 +33,13 @@ describe("readAndWriteNewCabal", () => {
       expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.0.7");
     });
   });
+
+  it("updates the version in the cabal file fixture when version is not semantic", async () => {
+    const versionPrefix = "0.";
+    await readAndWriteNewCabal(fakeCabalPath, versionPrefix + fakeNewVersion);
+
+    const modifiedContents = await readFile(fakeCabalPath, "utf8");
+
+    expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.0.7");
+  });
 });
