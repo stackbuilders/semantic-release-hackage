@@ -65,17 +65,18 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 
 ### Why adding a `versionPrefix` configuration?
 
-Haskell projects use a different way of versioning (A.B.C.D) than semantic versioning, you could think that since this plugin uses semantic-release, you have to move from your preview versioning way but thanks to the `versionPrefix` you could keep the usage of the 4 digits in your version.
+Haskell projects use a different versioning system (A.B.C.D) than [semantic versioning](https://semver.org/). You may think that since this is a `semantic-release` plugin, you'll have to move out from that versioning system. But thanks to the `versionPrefix` option, you can keep the 4th digit in your version.
 
 This is just an optional feature to enable backward compatibility when starting to use this plugin.
 
-We strongly recommend moving to semantic-versioning but if you cannot, the string `versionPrefix` can save the day.
+We strongly recommend moving to semantic versioning to keep things simple and follow a well-known standard. But `versionPrefix` can save the day if changing the versioning system is not an option.
 
-For example, if you have the version number `0.2.0.7` and want to create a new release for a new feature, semantic-release is going to infer the next version as `2.1.0`, you can keep your previous versioning adding the  
+For example, if you have the version number `0.2.0.7` and want to create a new release for a new feature, semantic-release is going to infer the next version as `2.1.0`, you can keep your previous versioning by adding the following to the plugin configuration:  
+
 ```
 "versionPrefix" : "0."
 ```
-And the plugin will add the `versionPrefix` to the new version, so your final version will be `0.2.1.0`.
+The plugin will add the `0.` prefix to the new version, so your final version will be `0.2.1.0`.
 ## License
 
 MIT, see [the LICENSE file](LICENSE).
