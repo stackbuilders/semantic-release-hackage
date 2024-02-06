@@ -1,5 +1,5 @@
 {
-  "name": "@stackbuilders/semantic-release-hackage",
+  "name": "semantic-release-hackage",
   "version": "0.0.0",
   "description": "A semantic-release plugin to publish Haskell packages to Hackage",
   "repository": "git@github.com:stackbuilders/semantic-release-hackage.git",
