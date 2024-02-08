@@ -65,7 +65,7 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 
 ### Why adding a `versionPrefix` configuration?
 
-Haskell projects use a different versioning system (A.B.C.D) than [semantic versioning](https://semver.org/). You may think that since this is a `semantic-release` plugin, you'll have to move out from that versioning system. But thanks to the `versionPrefix` option, you can keep the 4th digit in your version.
+[PVP](https://pvp.haskell.org/) is the standard versioning system for Haskell projects which is different from [Semantic Versioning](https://semver.org/). You may think that since this is a `semantic-release` plugin, you'll have to move out from PVP. But thanks to the `versionPrefix` option, you can keep the 4th digit in your version.
 
 This is just an optional feature to enable backward compatibility when starting to use this plugin.
 
