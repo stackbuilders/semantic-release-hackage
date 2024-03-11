@@ -17,7 +17,7 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
 
 export const prepare = async (
   { cabalFile, versionPrefix = "" }: PluginConfig,
-  { nextRelease, logger, cwd }: PrepareContext
+  { nextRelease, logger, cwd }: PrepareContext,
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);

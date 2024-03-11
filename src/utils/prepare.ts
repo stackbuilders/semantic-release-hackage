@@ -1,11 +1,12 @@
-import fs from "fs";
 import { PrepareContext } from "semantic-release";
+
+import fs from "fs";
 
 export function lookupCabalFilename(cwd: string, logger: PrepareContext["logger"]): string {
   const cabalFilename = fs
     .readdirSync(cwd)
-    .filter((path) => fs.statSync(path).isFile())
-    .filter((path) => path.endsWith(".cabal"))
+    .filter(path => fs.statSync(path).isFile())
+    .filter(path => path.endsWith(".cabal"))
     .at(0);
 
   if (!cabalFilename) {
