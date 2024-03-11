@@ -5641,6 +5641,7 @@ __metadata:
     semantic-release-yarn: "npm:^3.0.2"
     sinon: "npm:^17.0.1"
     ts-node: "npm:^10.9.2"
+    tslib: "npm:^2.6.2"
     typescript: "npm:^5.3.3"
   peerDependencies:
     semantic-release: ">=22.0.0"
@@ -6329,7 +6330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: bd26c22d36736513980091a1e356378e8b662ded04204453d353a7f34a4c21ed0afc59b5f90719d4ba756e581a162ecbf93118dc9c6be5acf70aa309188166ca
