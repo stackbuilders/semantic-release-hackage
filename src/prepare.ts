@@ -2,7 +2,7 @@ import { PrepareContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
-import { getCabalFilename } from "./utils/prepare";
+import { lookupCabalFilename } from "./utils/prepare";
 
 import { readFile, writeFile } from "fs/promises";
 import { resolve } from "path";
@@ -17,24 +17,22 @@ export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: st
 
 export const prepare = async (
   { cabalFile, versionPrefix = "" }: PluginConfig,
-  { nextRelease, logger }: PrepareContext,
+  { nextRelease, logger, cwd }: PrepareContext,
 ): Promise<void> => {
-  const cabalFileName = cabalFile ?? getCabalFilename();
+  const realCwd = cwd ?? process.cwd();
+  logger.log("Current working directory: ", realCwd);
+  const cabalFileName = cabalFile ?? lookupCabalFilename(realCwd, logger);
   const { version } = nextRelease ?? {};
 
-  logger.log("Check new version");
+  logger.log("Checking new version");
   if (!version) {
     throw new Error("Could not determine the version from semantic release. Check the plugin configuration");
   }
 
-  logger.log("Check cabal file");
-  if (!cabalFileName) {
-    throw new Error("Could not determine the cabal filename. Check the plugin configuration");
-  }
-
-  const fullCabalPath = resolve("./", cabalFileName);
+  logger.log("Checking cabal file");
+  const fullCabalPath = resolve(realCwd, cabalFileName);
   const fullVersion = `${versionPrefix}${version}`;
-  logger.log("Reading .cabal file");
+  logger.log("Reading .cabal file", fullCabalPath);
   await readAndWriteNewCabal(fullCabalPath, fullVersion);
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
