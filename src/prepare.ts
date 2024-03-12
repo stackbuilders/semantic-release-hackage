@@ -22,14 +22,8 @@ export const prepare = async (
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);
   const cabalFileName = cabalFile ?? lookupCabalFilename(realCwd, logger);
-  const { version } = nextRelease ?? {};
-
-  logger.log("Checking new version");
-  if (!version) {
-    throw new Error("Could not determine the version from semantic release. Check the plugin configuration");
-  }
-
-  logger.log("Checking cabal file");
+  const { version } = nextRelease;
+  logger.log("New version: ", version);
   const fullCabalPath = resolve(realCwd, cabalFileName);
   const fullVersion = `${versionPrefix}${version}`;
   logger.log("Reading .cabal file", fullCabalPath);
