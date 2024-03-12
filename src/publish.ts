@@ -1,19 +1,27 @@
 import axios from "axios";
+import fs from "fs";
 import { PublishContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
 
 export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
 
-export const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): Promise<number | undefined> => {
+export const postReleaseCandidate = async (
+  sdistPath: string,
+  filename: string,
+  hackageToken?: string,
+): Promise<number | undefined> => {
   try {
     const headers = {
       Accept: "text/plain",
+      "Content-Type": "multipart/form-data",
       Authorization: `X-ApiKey ${hackageToken}`,
     };
 
+    const { buffer } = fs.readFileSync(sdistPath);
+    const sdist = new File([buffer], filename);
     const formData = new FormData();
-    formData.append("package", sdistPath);
+    formData.append("package", sdist);
 
     const req = await axios.post(HACKAGE_CANDIDATES_URL, formData, { headers });
 
@@ -27,17 +35,18 @@ export const postReleaseCandidate = async (sdistPath: string, hackageToken?: str
 
 export const publish = async (
   { packageName, versionPrefix }: PluginConfig,
-  { logger, nextRelease, cwd }: PublishContext,
+  { logger, nextRelease, cwd }: PublishContext
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);
   const { version } = nextRelease;
   logger.log("Getting sdist path with version: ", version);
-  const sdistPath = `${realCwd}/dist-newstyle/sdist/${packageName}-${versionPrefix}${version}.tar.gz`;
-  logger.log("Full sdist path: ", sdistPath);
+  const filename = `${packageName}-${versionPrefix}${version}.tar.gz`;
+  const sdistPath = `${realCwd}/dist-newstyle/sdist/${filename}`;
+  logger.log("Uploading sdist: ", sdistPath);
 
   logger.log("Post release candidate in hackage");
-  const status = await postReleaseCandidate(sdistPath, process.env.HACKAGE_TOKEN);
+  const status = await postReleaseCandidate(sdistPath, filename, process.env.HACKAGE_TOKEN);
 
   if (status !== 200) {
     throw new Error(`Cannot post release candidate now, status: ${status}`);
