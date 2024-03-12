@@ -20,9 +20,8 @@ export const postReleaseCandidate = async (
     };
 
     const { buffer } = fs.readFileSync(sdistPath);
-    const sdist = new File([buffer], filename);
     const formData = new FormData();
-    formData.append("package", sdist);
+    formData.append("package", new Blob([buffer]));
 
     const req = await axios.post(HACKAGE_CANDIDATES_URL, formData, { headers });
 
