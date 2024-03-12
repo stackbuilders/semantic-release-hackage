@@ -1,8 +1,9 @@
 import axios from "axios";
-import fs from "fs";
 import { PublishContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
+
+import fs from "fs";
 
 export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
 
@@ -14,8 +15,8 @@ export const postReleaseCandidate = async (
   try {
     const headers = {
       Accept: "text/plain",
-      "Content-Type": "multipart/form-data",
       Authorization: `X-ApiKey ${hackageToken}`,
+      "Content-Type": "multipart/form-data",
     };
 
     const { buffer } = fs.readFileSync(sdistPath);
@@ -35,7 +36,7 @@ export const postReleaseCandidate = async (
 
 export const publish = async (
   { packageName, versionPrefix }: PluginConfig,
-  { logger, nextRelease, cwd }: PublishContext
+  { logger, nextRelease, cwd }: PublishContext,
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);
