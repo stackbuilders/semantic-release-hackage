@@ -9,7 +9,6 @@ export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/cand
 
 export const postReleaseCandidate = async (
   sdistPath: string,
-  filename: string,
   hackageToken?: string,
 ): Promise<number | undefined> => {
   try {
@@ -19,11 +18,7 @@ export const postReleaseCandidate = async (
       "Content-Type": "multipart/form-data",
     };
 
-    const { buffer } = fs.readFileSync(sdistPath);
-    const formData = new FormData();
-    formData.append("package", new Blob([buffer]));
-
-    const req = await axios.post(HACKAGE_CANDIDATES_URL, formData, { headers });
+    const req = await axios.post(HACKAGE_CANDIDATES_URL, { package: fs.createReadStream(sdistPath) }, { headers });
 
     return req.status;
   } catch (e: unknown) {
@@ -46,7 +41,7 @@ export const publish = async (
   logger.log("Uploading sdist: ", sdistPath);
 
   logger.log("Post release candidate in hackage");
-  const status = await postReleaseCandidate(sdistPath, filename, process.env.HACKAGE_TOKEN);
+  const status = await postReleaseCandidate(sdistPath, process.env.HACKAGE_TOKEN);
 
   if (status !== 200) {
     throw new Error(`Cannot post release candidate now, status: ${status}`);

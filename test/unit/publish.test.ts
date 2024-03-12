@@ -12,7 +12,7 @@ describe("postReleaseCandidate", () => {
   it("returns the status code when request is successful", async () => {
     const axiosPostStub = sinon.stub(axios, "post").resolves({ status: 200 });
 
-    const statusCode = await postReleaseCandidate(sdistPath, filename, hackageToken);
+    const statusCode = await postReleaseCandidate(sdistPath, hackageToken);
 
     expect(statusCode).toBeEqual(200);
     expect(axiosPostStub.calledOnce).toBeTruthy();
@@ -23,7 +23,7 @@ describe("postReleaseCandidate", () => {
     const errorMsg = "Error message from server";
     const axiosPostStub = sinon.stub(axios, "post").rejects({ message: errorMsg });
 
-    const request = postReleaseCandidate(sdistPath, filename, hackageToken);
+    const request = postReleaseCandidate(sdistPath, hackageToken);
 
     await expect(request).toBeRejected();
     expect(axiosPostStub.calledOnce).toBeTruthy();
