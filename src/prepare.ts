@@ -23,10 +23,9 @@ export const prepare = async (
   logger.log("Current working directory: ", realCwd);
   const cabalFileName = cabalFile ?? lookupCabalFilename(realCwd, logger);
   const { version } = nextRelease;
-  logger.log("New version: ", version);
   const fullCabalPath = resolve(realCwd, cabalFileName);
   const fullVersion = `${versionPrefix}${version}`;
-  logger.log("Reading .cabal file", fullCabalPath);
+  logger.log("Reading .cabal file: ", fullCabalPath);
   await readAndWriteNewCabal(fullCabalPath, fullVersion);
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
