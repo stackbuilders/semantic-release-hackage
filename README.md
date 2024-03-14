@@ -1,3 +1,12 @@
+[![CI](https://github.com/stackbuilders/semantic-release-hackage/actions/workflows/ci.yml/badge.svg)](https://github.com/stackbuilders/semantic-release-hackage/actions/workflows/ci.yml)
+[![Release](https://github.com/stackbuilders/semantic-release-hackage/actions/workflows/release.yml/badge.svg)](https://github.com/stackbuilders/semantic-release-hackage/actions/workflows/release.yml)
+[![NPM version](https://img.shields.io/npm/v/semantic-release-hackage?logo=npm)](https://www.npmjs.com/package/semantic-release-hackage)
+[![NPM bundle size](https://img.shields.io/bundlephobia/min/semantic-release-hackage)](https://www.npmjs.com/package/semantic-release-hackage)
+[![NPM downloads](https://img.shields.io/npm/dm/semantic-release-hackage)](https://www.npmjs.com/package/semantic-release-hackage)
+[![NPM license](https://img.shields.io/npm/l/semantic-release-hackage)](https://github.com/stackbuilders/semantic-release-hackage/blob/main/LICENSE)
+[![GitHub Release Date](https://img.shields.io/github/release-date/stackbuilders/semantic-release-hackage)](https://github.com/stackbuilders/semantic-release-hackage/releases)
+[![Known Vulnerabilities](https://snyk.io/test/github/stackbuilders/semantic-release-hackage/badge.svg)](https://snyk.io/test/github/stackbuilders/semantic-release-hackage)
+
 # semantic-release-hackage
 
 [semantic-release](https://semantic-release.gitbook.io/semantic-release/) plugin to publish a haskell package to [Hackage](https://hackage.haskell.org/)
