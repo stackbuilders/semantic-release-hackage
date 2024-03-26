@@ -26,6 +26,29 @@ export const postReleaseCandidate = async (sdistPath: string, hackageToken?: str
   }
 };
 
+
+export const publishRCDocumentation = async (
+  docsSdistPath: string,
+  url: string,
+  hackageToken?: string
+): Promise<number | undefined> => {
+  try {
+    const headers = {
+      Authorization: `X-ApiKey ${hackageToken}`,
+      "Content-Type": "application/x-tar",
+      "Content-Encoding": "gzip",
+    };
+
+    const req = await axios.put(url, fs.createReadStream(docsSdistPath), { headers });
+
+    return req.status;
+  } catch (e: unknown) {
+    throw e instanceof Error
+      ? new Error(`You do not have access to POST a documentation file to ${url} , ${e.message}`)
+      : e;
+  }
+};
+
 export const publish = async (
   { packageName, versionPrefix, publishDocumentation }: PluginConfig,
   { logger, nextRelease, cwd }: PublishContext
