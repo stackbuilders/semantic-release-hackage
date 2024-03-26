@@ -2,9 +2,9 @@ import axios from "axios";
 import { PublishContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
+import { runExecCommand } from "./utils/exec";
 
 import fs from "fs";
-import { runExecCommand } from "./utils/exec";
 
 export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
 
@@ -26,17 +26,16 @@ export const postReleaseCandidate = async (sdistPath: string, hackageToken?: str
   }
 };
 
-
 export const publishRCDocumentation = async (
   docsSdistPath: string,
   url: string,
-  hackageToken?: string
+  hackageToken?: string,
 ): Promise<number | undefined> => {
   try {
     const headers = {
       Authorization: `X-ApiKey ${hackageToken}`,
-      "Content-Type": "application/x-tar",
       "Content-Encoding": "gzip",
+      "Content-Type": "application/x-tar",
     };
 
     const req = await axios.put(url, fs.createReadStream(docsSdistPath), { headers });
@@ -51,7 +50,7 @@ export const publishRCDocumentation = async (
 
 export const publish = async (
   { packageName, versionPrefix, publishDocumentation }: PluginConfig,
-  { logger, nextRelease, cwd }: PublishContext
+  { logger, nextRelease, cwd }: PublishContext,
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);
@@ -83,9 +82,9 @@ export const publish = async (
     const docsSdistPath = `${realCwd}/dist-newstyle/${docsFilename}`;
     const docsUrl = `https://hackage.haskell.org/package/${packageName}-${versionPrefix}${version}/candidate/docs`;
 
-    const status = await publishRCDocumentation(docsSdistPath, docsUrl, process.env.HACKAGE_TOKEN);
+    const docStatus = await publishRCDocumentation(docsSdistPath, docsUrl, process.env.HACKAGE_TOKEN);
 
-    if (status !== 200) {
+    if (docStatus !== 200) {
       throw new Error(`Cannot post release candidate documentation now, status: ${status}`);
     }
   }
