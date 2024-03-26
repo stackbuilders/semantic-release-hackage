@@ -4,13 +4,11 @@ import { PublishContext } from "semantic-release";
 import { PluginConfig } from "./types/pluginConfig";
 
 import fs from "fs";
+import { runExecCommand } from "./utils/exec";
 
 export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
 
-export const postReleaseCandidate = async (
-  sdistPath: string,
-  hackageToken?: string,
-): Promise<number | undefined> => {
+export const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): Promise<number | undefined> => {
   try {
     const headers = {
       Accept: "text/plain",
@@ -29,8 +27,8 @@ export const postReleaseCandidate = async (
 };
 
 export const publish = async (
-  { packageName, versionPrefix }: PluginConfig,
-  { logger, nextRelease, cwd }: PublishContext,
+  { packageName, versionPrefix, publishDocumentation }: PluginConfig,
+  { logger, nextRelease, cwd }: PublishContext
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
   logger.log("Current working directory: ", realCwd);
@@ -45,6 +43,28 @@ export const publish = async (
 
   if (status !== 200) {
     throw new Error(`Cannot post release candidate now, status: ${status}`);
+  }
+
+  logger.log("Checking publishDocumentation plugin configuration: ", publishDocumentation);
+  if (publishDocumentation) {
+    logger.log("Generating documentation");
+    const { error, output } = await runExecCommand("cabal haddock --haddock-for-hackage --enable-documentation");
+
+    if (error) {
+      logger.error(error);
+      throw new Error(error);
+    }
+    logger.log(output);
+    logger.log("Publishing documentation");
+    const docsFilename = `${packageName}-${versionPrefix}${version}-docs.tar.gz`;
+    const docsSdistPath = `${realCwd}/dist-newstyle/${docsFilename}`;
+    const docsUrl = `https://hackage.haskell.org/package/${packageName}-${versionPrefix}${version}/candidate/docs`;
+
+    const status = await publishRCDocumentation(docsSdistPath, docsUrl, process.env.HACKAGE_TOKEN);
+
+    if (status !== 200) {
+      throw new Error(`Cannot post release candidate documentation now, status: ${status}`);
+    }
   }
 
   logger.success("Publish done!");
