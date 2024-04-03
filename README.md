@@ -13,7 +13,7 @@
 
 ## Motivation
 
-Semantic-release is widely used in the development world but have not been implemented for haskell projects and applications until now. This plugin is intended to help you creating your candidate releases for a hackage package using the benefits of semantic-release
+Semantic-release is widely used in the development world but have not been implemented for haskell projects and applications until now. This plugin is intended to help you create your candidate releases for a hackage package using the benefits of semantic-release
 
 ## Steps
 
