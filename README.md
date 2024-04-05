@@ -57,7 +57,8 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
       {
         "cabalFile": "yourcabalfilename",
         "packageName": "yourpackagename",
-        "versionPrefix": "0."
+        "versionPrefix": "0.",
+        "publishDocumentation": true
       }
     ]
   ]
@@ -70,7 +71,8 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 | --------------- | --------------------------------------- | --------------------------------------------- | -------- |
 | `cabalFile`     | Cabal file name                         | Plugin will read your root `.cabal` file name | `false`  |
 | `packageName`   | Package name in Hackage                 |                                               | `true`   |
-| `versionPrefix` | For supporting Haskell package versions |                                               | `false`  |
+| `versionPrefix` | For supporting PVP versioning |                                               | `false`  |
+| `publishDocumentation` | For publishing release candidate documentation |                                               | `false`  |
 
 ### Why adding a `versionPrefix` configuration?
 
