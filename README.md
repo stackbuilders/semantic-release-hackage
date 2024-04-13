@@ -67,12 +67,31 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 
 ## Configuration
 
-| Property        | Description                             | Default                                       | Required |
-| --------------- | --------------------------------------- | --------------------------------------------- | -------- |
-| `cabalFile`     | Cabal file name                         | Plugin will read your root `.cabal` file name | `false`  |
-| `packageName`   | Package name in Hackage                 |                                               | `true`   |
-| `versionPrefix` | For supporting PVP versioning |                                               | `false`  |
-| `publishDocumentation` | For publishing release candidate documentation |                                               | `false`  |
+### *packageName*
+Required: `true`
+
+Description: Package name in Hackage.
+
+### *cabalFile*
+Required: `false`
+
+Description: Library cabal file name.
+
+Default: The plugin will read your root `.cabal` file name.
+
+### *publishDocumentation*
+Required: `false`
+
+Description: Boolean value used for publishing release candidate documentation. When `true` the plugin will publish the documentation along with the candidate release.
+
+Default: `false`
+
+### *versionPrefix*
+Required: `false`
+
+Description: This is a version prefix created for supporting PVP versioning.
+
+Default: `""`
 
 ### Why adding a `versionPrefix` configuration?
 
