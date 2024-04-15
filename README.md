@@ -13,7 +13,7 @@
 
 ## Motivation
 
-Semantic-release is widely used in the development world but have not been implemented for haskell projects and applications until now. This plugin is intended to help you creating your candidate releases for a hackage package using the benefits of semantic-release
+Semantic-release is widely used in the development world but have not been implemented for haskell projects and applications until now. This plugin is intended to help you create your candidate releases for a hackage package using the benefits of semantic-release
 
 ## Steps
 
@@ -57,7 +57,8 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
       {
         "cabalFile": "yourcabalfilename",
         "packageName": "yourpackagename",
-        "versionPrefix": "0."
+        "versionPrefix": "0.",
+        "publishDocumentation": true
       }
     ]
   ]
@@ -66,11 +67,31 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 
 ## Configuration
 
-| Property        | Description                             | Default                                       | Required |
-| --------------- | --------------------------------------- | --------------------------------------------- | -------- |
-| `cabalFile`     | Cabal file name                         | Plugin will read your root `.cabal` file name | `false`  |
-| `packageName`   | Package name in Hackage                 |                                               | `true`   |
-| `versionPrefix` | For supporting Haskell package versions |                                               | `false`  |
+### *packageName*
+Required: `true`
+
+Description: Package name in Hackage.
+
+### *cabalFile*
+Required: `false`
+
+Description: Library cabal file name.
+
+Default: The plugin will read your root `.cabal` file name.
+
+### *publishDocumentation*
+Required: `false`
+
+Description: Boolean value used for publishing release candidate documentation. When `true` the plugin will publish the documentation along with the candidate release.
+
+Default: `false`
+
+### *versionPrefix*
+Required: `false`
+
+Description: This is a version prefix created for supporting PVP versioning.
+
+Default: `""`
 
 ### Why adding a `versionPrefix` configuration?
 
