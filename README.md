@@ -66,7 +66,7 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 ```
 
 ### Development
-Semantic-release does not need the latest version defined to do its job, to simplify the version management inside your repository `.cabal` file during development time, we strongly recommend using:
+Based on the semantic-release philosophy, you don't need to keep track of the version in your repository (.cabal) anymore. The plugin will build the package with the proper version on the fly, making it simpler for you to maintain your packages. In simpler words, you can change you `.cabal` file to the following:
 
 ```cabal
   ...
@@ -74,14 +74,9 @@ Semantic-release does not need the latest version defined to do its job, to simp
   ...
 ```
 
-or
-
-```cabal
-  ...
-  version: 0.0.0
-  ...
-```
 __Note: Your Hackage release candidate is going to have the released version in the .cabal file.__
+
+> If you still want to keep track of the version in the repository, you'll need to allow semantic-release to update your .cabal file in your repository after the semantic-release-hackage plugin finishes. This can be achieved with the [@semantic-release/git plugin](https://github.com/semantic-release/git), but keep in mind that semantic-release explicitly [discourages making commits during your release process](https://semantic-release.gitbook.io/semantic-release/support/faq#making-commits-during-the-release-process-adds-significant-complexity).
 
 ## Configuration
 
