@@ -66,7 +66,7 @@ The plugin can be configured in the [**semantic-release** configuration file](ht
 ```
 
 ### Development
-Based on the semantic-release philosophy, you don't need to keep track of the version in your repository (.cabal) anymore. The plugin will build the package with the proper version on the fly, making it simpler for you to maintain your packages. In simpler words, you can change you `.cabal` file to the following:
+Based on the semantic-release philosophy, you don't need to keep track of the version in your repository (.cabal) anymore. The plugin will build the package with the proper version on the fly, making it simpler for you to maintain your packages. In simpler words, you can change your `.cabal` file to the following:
 
 ```cabal
   ...
