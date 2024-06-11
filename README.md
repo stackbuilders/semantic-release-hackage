@@ -114,9 +114,9 @@ Default: `""`
 
 [PVP](https://pvp.haskell.org/) is the standard versioning system for Haskell projects which is different from [Semantic Versioning](https://semver.org/). You may think that since this is a `semantic-release` plugin, you'll have to move out from PVP. But thanks to the `versionPrefix` option, you can keep the 4th digit in your version.
 
-This is just an optional feature to enable backward compatibility when starting to use this plugin.
+This is an optional feature enabling PVP compatibility when using this plugin. So, if your package uses PVP, `versionPrefix` can save the day, and you can continue using PVP versioning with this amazing tool.
 
-We strongly recommend moving to semantic versioning to keep things simple and follow a well-known standard. But `versionPrefix` can save the day if changing the versioning system is not an option.
+Keep in mind that using Semantic Versioning does make things simpler while following another well-known standard.
 
 For example, if you have the version number `0.2.0.7` and want to create a new release for a new feature, semantic-release is going to infer the next version as `2.1.0`, you can keep your previous versioning by adding the following to the plugin configuration:
 
