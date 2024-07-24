@@ -66,7 +66,7 @@ describe("VERSION_PATTERN", () => {
   it("matches a valid version of strings", () => {
     const validStrings = ["version: 1.0.0", "   version: 2.3.4", "version: 3.0.0-alpha", "version: 4.2.0-beta.1"];
 
-    validStrings.forEach((str) => {
+    validStrings.forEach(str => {
       const match = str.match(VERSION_PATTERN);
       expect(match).not.toBeNull();
       if (match && match[1]) {
@@ -78,7 +78,7 @@ describe("VERSION_PATTERN", () => {
   it("does not match invalid version strings", () => {
     const invalidStrings = ["version 1.0.0", "ver: 2.3.4", "version:", "version:"];
 
-    invalidStrings.forEach((str) => {
+    invalidStrings.forEach(str => {
       const match = str.match(VERSION_PATTERN);
       expect(match).toBeNull();
     });
@@ -87,7 +87,7 @@ describe("VERSION_PATTERN", () => {
   it("matches version strings with extra spaces", () => {
     const validStrings = ["   version: 1.0.0", "\tversion: 2.3.4", " \t version: 3.0.0-alpha"];
 
-    validStrings.forEach((str) => {
+    validStrings.forEach(str => {
       const match = str.match(VERSION_PATTERN);
       expect(match).not.toBeNull();
       if (match && match[1]) {
@@ -98,11 +98,11 @@ describe("VERSION_PATTERN", () => {
 
   it("captures the correct version value", () => {
     const testCases = [
-      { input: "version: 1.0.0", expected: "1.0.0" },
-      { input: "  version: 2.3.4", expected: "2.3.4" },
+      { expected: "1.0.0", input: "version: 1.0.0" },
+      { expected: "2.3.4", input: "  version: 2.3.4" },
     ];
 
-    testCases.forEach(({ input, expected }) => {
+    testCases.forEach(({ expected, input }) => {
       const match = input.match(VERSION_PATTERN);
       expect(match).not.toBeNull();
       if (match && match[1]) {
