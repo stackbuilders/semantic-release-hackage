@@ -8,6 +8,8 @@ import fs from "fs";
 
 export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
 
+const V2_HADDOCK_COMMAND = "cabal v2-haddock --haddock-for-hackage --enable-documentation";
+
 export const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): Promise<number | undefined> => {
   try {
     const headers = {
@@ -70,7 +72,7 @@ export const publish = async (
   logger.log("Checking publishDocumentation plugin configuration: ", publishDocumentation);
   if (publishDocumentation) {
     logger.log("Generating documentation");
-    const { error, output } = await runExecCommand("cabal haddock --haddock-for-hackage --enable-documentation");
+    const { error, output } = await runExecCommand(V2_HADDOCK_COMMAND);
 
     if (error) {
       logger.error(error);
@@ -82,6 +84,7 @@ export const publish = async (
     const docsSdistPath = `${realCwd}/dist-newstyle/${docsFilename}`;
     const docsUrl = `https://hackage.haskell.org/package/${packageName}-${versionPrefix}${version}/candidate/docs`;
 
+    logger.log("Publishing file: ", docsFilename, " from: ", docsSdistPath);
     const docStatus = await publishRCDocumentation(docsSdistPath, docsUrl, process.env.HACKAGE_TOKEN);
 
     if (docStatus !== 200) {
