@@ -37,5 +37,5 @@ export const prepare = async (
   }
 
   logger.log(output);
-  logger.success("Prepare done!");  
+  logger.success("Prepare done!");
 };
