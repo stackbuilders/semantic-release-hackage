@@ -72,11 +72,10 @@ export const publish = async (
   logger.log("Checking publishDocumentation plugin configuration: ", publishDocumentation);
   if (publishDocumentation) {
     logger.log("Generating documentation");
-    const { error, output } = await runExecCommand(V2_HADDOCK_COMMAND);
+    const { warn, output } = await runExecCommand(V2_HADDOCK_COMMAND);
 
-    if (error) {
-      logger.error(error);
-      throw new Error(error);
+    if (warn) {
+      logger.warn(warn);
     }
     logger.log(output);
     logger.log("Publishing documentation");
