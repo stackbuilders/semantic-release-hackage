@@ -30,11 +30,10 @@ export const prepare = async (
   logger.log("Writing new version %s to `%s`", version, fullCabalPath);
 
   logger.log("Running cabal sdist command");
-  const { error, output } = await runExecCommand("cabal sdist");
+  const { warn, output } = await runExecCommand("cabal sdist");
 
-  if (error) {
-    logger.error(error);
-    throw new Error(error);
+  if (warn) {
+    logger.warn(warn);
   }
 
   logger.log(output);
