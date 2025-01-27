@@ -1,122 +1,52 @@
-import axios from "axios";
 import { PublishContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
-import { runExecCommand } from "./utils/exec";
+import { postPackage } from "./utils/hackage";
 
 import fs from "fs";
 
-export const HACKAGE_CANDIDATES_URL =
-  "https://hackage.haskell.org/packages/candidates";
-
-const V2_HADDOCK_COMMAND =
-  "cabal v2-haddock --haddock-for-hackage --enable-documentation";
-
-export const postReleaseCandidate = async (
-  sdistPath: string,
-  hackageToken?: string,
-): Promise<number | undefined> => {
-  try {
-    const headers = {
-      Accept: "text/plain",
-      Authorization: `X-ApiKey ${hackageToken}`,
-      "Content-Type": "multipart/form-data",
-    };
-
-    const req = await axios.post(
-      HACKAGE_CANDIDATES_URL,
-      { package: fs.createReadStream(sdistPath) },
-      { headers },
-    );
-
-    return req.status;
-  } catch (e: unknown) {
-    throw e instanceof Error
-      ? new Error(
-          `You do not have access to POST a file to ${HACKAGE_CANDIDATES_URL} , ${e.message}`,
-        )
-      : e;
-  }
-};
-
-export const publishRCDocumentation = async (
-  docsSdistPath: string,
-  url: string,
-  hackageToken?: string,
-): Promise<number | undefined> => {
-  try {
-    const headers = {
-      Authorization: `X-ApiKey ${hackageToken}`,
-      "Content-Encoding": "gzip",
-      "Content-Type": "application/x-tar",
-    };
-
-    const req = await axios.put(url, fs.createReadStream(docsSdistPath), {
-      headers,
-    });
-
-    return req.status;
-  } catch (e: unknown) {
-    throw e instanceof Error
-      ? new Error(
-          `You do not have access to POST a documentation file to ${url} , ${e.message}`,
-        )
-      : e;
-  }
-};
+const VERSION_SUFFIX = /^([0-9]+\.[0-9]+\.[0-9]+).*$/;
 
 export const publish = async (
-  { packageName, versionPrefix, publishDocumentation }: PluginConfig,
-  { logger, nextRelease, cwd }: PublishContext,
+  { packageName, versionPrefix, stripSuffix }: PluginConfig,
+  { branch, logger, nextRelease, cwd }: PublishContext,
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
+  const { version: rawVersion } = nextRelease;
+  const version = stripSuffix
+    ? rawVersion.replace(VERSION_SUFFIX, "$1") // drop suffix
+    : rawVersion;
+  const fullVersion = `${versionPrefix}${version}`;
+  const sdistPath = `${packageName}-${fullVersion}.tar.gz`;
+  const fullSdistPath = `${realCwd}/dist-newstyle/sdist/${sdistPath}`;
+
   logger.log("Current working directory: ", realCwd);
-  const { version } = nextRelease;
-  logger.log("Getting sdist path with version: ", version);
-  const filename = `${packageName}-${versionPrefix}${version}.tar.gz`;
-  const sdistPath = `${realCwd}/dist-newstyle/sdist/${filename}`;
-  logger.log("Uploading sdist: ", sdistPath);
+  logger.log("Full version: ", fullVersion);
+  logger.log("Full sdist path: ", fullSdistPath);
 
-  logger.log("Post release candidate in hackage");
-  const status = await postReleaseCandidate(
-    sdistPath,
-    process.env.HACKAGE_TOKEN,
-  );
+  const exists = fs.existsSync(fullSdistPath);
 
-  if (status !== 200) {
-    throw new Error(`Cannot post release candidate now, status: ${status}`);
+  if (!exists) {
+    throw new Error(`${fullSdistPath} does not exist`);
   }
 
   logger.log(
-    "Checking publishDocumentation plugin configuration: ",
-    publishDocumentation,
+    "Publishing %s to hackage",
+    branch.prerelease ? "release candidate" : "release",
   );
-  if (publishDocumentation) {
-    logger.log("Generating documentation");
-    const { warn, output } = await runExecCommand(V2_HADDOCK_COMMAND);
 
-    if (warn) {
-      logger.warn(warn);
-    }
-    logger.log(output);
-    logger.log("Publishing documentation");
-    const docsFilename = `${packageName}-${versionPrefix}${version}-docs.tar.gz`;
-    const docsSdistPath = `${realCwd}/dist-newstyle/${docsFilename}`;
-    const docsUrl = `https://hackage.haskell.org/package/${packageName}-${versionPrefix}${version}/candidate/docs`;
+  await postPackage(
+    fullSdistPath,
+    process.env.HACKAGE_TOKEN,
+    branch.prerelease,
+  );
 
-    logger.log("Publishing file: ", docsFilename, " from: ", docsSdistPath);
-    const docStatus = await publishRCDocumentation(
-      docsSdistPath,
-      docsUrl,
-      process.env.HACKAGE_TOKEN,
-    );
-
-    if (docStatus !== 200) {
-      throw new Error(
-        `Cannot post release candidate documentation now, status: ${status}`,
-      );
-    }
-  }
+  logger.log(
+    "Published hackage release: https://hackage.haskell.org/package/%s-%s%s",
+    packageName,
+    fullVersion,
+    branch.prerelease ? "/candidate" : "",
+  );
 
   logger.success("Publish done!");
 };

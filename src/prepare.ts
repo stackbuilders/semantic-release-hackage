@@ -4,39 +4,55 @@ import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
 import { lookupCabalFilename } from "./utils/prepare";
 
-import { readFile, writeFile } from "fs/promises";
+import fs from "fs";
 import { resolve } from "path";
 
-export const VERSION_PATTERN = /^\s*version:\s+(\S+)/m;
+const VERSION_PATTERN = /^\s*version:\s+(\S+)/m;
+const VERSION_SUFFIX = /^([0-9]+\.[0-9]+\.[0-9]+).*$/;
+const PACKAGE_YAML = "package.yaml";
 
-export const readAndWriteNewCabal = async (
-  fullCabalPath: string,
-  newVersion: string,
-): Promise<void> => {
-  const versionContents = await readFile(fullCabalPath, "utf8");
+function readAndWriteNewVersion(fullPath: string, newVersion: string): void {
+  const versionContents = fs.readFileSync(fullPath, "utf8");
   const newContents = versionContents.replace(
     VERSION_PATTERN,
     `version: ${newVersion}`,
   );
-  await writeFile(fullCabalPath, newContents, "utf8");
-};
+  fs.writeFileSync(fullPath, newContents, "utf8");
+}
 
 export const prepare = async (
-  { cabalFile, versionPrefix = "" }: PluginConfig,
+  {
+    cabalCmd = "cabal",
+    cabalFile,
+    sdistOptions = "",
+    stripSuffix = false,
+    versionPrefix = "",
+  }: PluginConfig,
   { nextRelease, logger, cwd }: PrepareContext,
 ): Promise<void> => {
   const realCwd = cwd ?? process.cwd();
-  logger.log("Current working directory: ", realCwd);
   const cabalFileName = cabalFile ?? lookupCabalFilename(realCwd, logger);
-  const { version } = nextRelease;
+  const { version: rawVersion } = nextRelease;
+  const version = stripSuffix
+    ? rawVersion.replace(VERSION_SUFFIX, "$1")
+    : rawVersion;
+  const fullPackageYaml = resolve(realCwd, PACKAGE_YAML);
   const fullCabalPath = resolve(realCwd, cabalFileName);
   const fullVersion = `${versionPrefix}${version}`;
-  logger.log("Reading .cabal file: ", fullCabalPath);
-  await readAndWriteNewCabal(fullCabalPath, fullVersion);
-  logger.log("Writing new version %s to `%s`", version, fullCabalPath);
+  const sdistCmd = `${cabalCmd} sdist ${sdistOptions}`;
 
-  logger.log("Running cabal sdist command");
-  const { warn, output } = await runExecCommand("cabal sdist");
+  if (fs.existsSync(PACKAGE_YAML)) {
+    // Update package.yaml if it exists
+    logger.log("Writing new version %s to `%s`", fullVersion, fullPackageYaml);
+    readAndWriteNewVersion(fullPackageYaml, fullVersion);
+  }
+
+  // Always update *.cabal
+  logger.log("Writing new version %s to `%s`", fullVersion, fullCabalPath);
+  readAndWriteNewVersion(fullCabalPath, fullVersion);
+
+  logger.log(`Running ${sdistCmd}`);
+  const { warn, output } = await runExecCommand(sdistCmd);
 
   if (warn) {
     logger.warn(warn);

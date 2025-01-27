@@ -1,6 +1,6 @@
 # Build
 build/
-dist/
+#dist/ # TODO: temporarily committed so we can test as git dep
 
 # Dependencies
 node_modules/
