@@ -9,9 +9,15 @@ import { resolve } from "path";
 
 export const VERSION_PATTERN = /^\s*version:\s+(\S+)/m;
 
-export const readAndWriteNewCabal = async (fullCabalPath: string, newVersion: string): Promise<void> => {
+export const readAndWriteNewCabal = async (
+  fullCabalPath: string,
+  newVersion: string,
+): Promise<void> => {
   const versionContents = await readFile(fullCabalPath, "utf8");
-  const newContents = versionContents.replace(VERSION_PATTERN, `version: ${newVersion}`);
+  const newContents = versionContents.replace(
+    VERSION_PATTERN,
+    `version: ${newVersion}`,
+  );
   await writeFile(fullCabalPath, newContents, "utf8");
 };
 

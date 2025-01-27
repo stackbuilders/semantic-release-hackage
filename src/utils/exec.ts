@@ -8,7 +8,9 @@ interface OutputExec {
 export const runExecCommand = (command: string): Promise<OutputExec> => {
   return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
-      error !== null ? reject(error) : resolve({ output: stdout, warn: stderr });
+      error !== null
+        ? reject(error)
+        : resolve({ output: stdout, warn: stderr });
     });
   });
 };

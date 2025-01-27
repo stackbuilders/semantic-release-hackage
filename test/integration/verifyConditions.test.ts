@@ -16,12 +16,16 @@ describe("verifyConditions", () => {
 
     expect(() => verifyConditions(pluginConfig, semanticVerifyReleaseContext))
       .toThrowError(EnvVarError)
-      .toHaveMessage("Environment variable not found: HACKAGE_TOKEN. Check the README.md for config info.");
+      .toHaveMessage(
+        "Environment variable not found: HACKAGE_TOKEN. Check the README.md for config info.",
+      );
   });
 
   it("does not throw EnvVarError when HACKAGE_TOKEN is defined", () => {
     process.env.HACKAGE_TOKEN = "test_token";
 
-    expect(() => verifyConditions(pluginConfig, semanticVerifyReleaseContext)).not.toThrow();
+    expect(() =>
+      verifyConditions(pluginConfig, semanticVerifyReleaseContext),
+    ).not.toThrow();
   });
 });

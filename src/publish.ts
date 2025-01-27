@@ -6,11 +6,16 @@ import { runExecCommand } from "./utils/exec";
 
 import fs from "fs";
 
-export const HACKAGE_CANDIDATES_URL = "https://hackage.haskell.org/packages/candidates";
+export const HACKAGE_CANDIDATES_URL =
+  "https://hackage.haskell.org/packages/candidates";
 
-const V2_HADDOCK_COMMAND = "cabal v2-haddock --haddock-for-hackage --enable-documentation";
+const V2_HADDOCK_COMMAND =
+  "cabal v2-haddock --haddock-for-hackage --enable-documentation";
 
-export const postReleaseCandidate = async (sdistPath: string, hackageToken?: string): Promise<number | undefined> => {
+export const postReleaseCandidate = async (
+  sdistPath: string,
+  hackageToken?: string,
+): Promise<number | undefined> => {
   try {
     const headers = {
       Accept: "text/plain",
@@ -18,12 +23,18 @@ export const postReleaseCandidate = async (sdistPath: string, hackageToken?: str
       "Content-Type": "multipart/form-data",
     };
 
-    const req = await axios.post(HACKAGE_CANDIDATES_URL, { package: fs.createReadStream(sdistPath) }, { headers });
+    const req = await axios.post(
+      HACKAGE_CANDIDATES_URL,
+      { package: fs.createReadStream(sdistPath) },
+      { headers },
+    );
 
     return req.status;
   } catch (e: unknown) {
     throw e instanceof Error
-      ? new Error(`You do not have access to POST a file to ${HACKAGE_CANDIDATES_URL} , ${e.message}`)
+      ? new Error(
+          `You do not have access to POST a file to ${HACKAGE_CANDIDATES_URL} , ${e.message}`,
+        )
       : e;
   }
 };
@@ -40,12 +51,16 @@ export const publishRCDocumentation = async (
       "Content-Type": "application/x-tar",
     };
 
-    const req = await axios.put(url, fs.createReadStream(docsSdistPath), { headers });
+    const req = await axios.put(url, fs.createReadStream(docsSdistPath), {
+      headers,
+    });
 
     return req.status;
   } catch (e: unknown) {
     throw e instanceof Error
-      ? new Error(`You do not have access to POST a documentation file to ${url} , ${e.message}`)
+      ? new Error(
+          `You do not have access to POST a documentation file to ${url} , ${e.message}`,
+        )
       : e;
   }
 };
@@ -63,13 +78,19 @@ export const publish = async (
   logger.log("Uploading sdist: ", sdistPath);
 
   logger.log("Post release candidate in hackage");
-  const status = await postReleaseCandidate(sdistPath, process.env.HACKAGE_TOKEN);
+  const status = await postReleaseCandidate(
+    sdistPath,
+    process.env.HACKAGE_TOKEN,
+  );
 
   if (status !== 200) {
     throw new Error(`Cannot post release candidate now, status: ${status}`);
   }
 
-  logger.log("Checking publishDocumentation plugin configuration: ", publishDocumentation);
+  logger.log(
+    "Checking publishDocumentation plugin configuration: ",
+    publishDocumentation,
+  );
   if (publishDocumentation) {
     logger.log("Generating documentation");
     const { warn, output } = await runExecCommand(V2_HADDOCK_COMMAND);
@@ -84,10 +105,16 @@ export const publish = async (
     const docsUrl = `https://hackage.haskell.org/package/${packageName}-${versionPrefix}${version}/candidate/docs`;
 
     logger.log("Publishing file: ", docsFilename, " from: ", docsSdistPath);
-    const docStatus = await publishRCDocumentation(docsSdistPath, docsUrl, process.env.HACKAGE_TOKEN);
+    const docStatus = await publishRCDocumentation(
+      docsSdistPath,
+      docsUrl,
+      process.env.HACKAGE_TOKEN,
+    );
 
     if (docStatus !== 200) {
-      throw new Error(`Cannot post release candidate documentation now, status: ${status}`);
+      throw new Error(
+        `Cannot post release candidate documentation now, status: ${status}`,
+      );
     }
   }
 

@@ -22,18 +22,25 @@ describe("readAndWriteNewCabal", () => {
 
         const modifiedContents = await readFile(fakeCabalPath, "utf8");
 
-        expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.7");
+        expect(modifiedContents).toBeEqual(
+          "name: test-1-package\nversion: 0.0.7",
+        );
       });
     });
 
     context("when version is not semantic", () => {
       it("updates the version in the cabal file fixture", async () => {
         const versionPrefix = "0.";
-        await readAndWriteNewCabal(fakeCabalPath, versionPrefix + fakeNewVersion);
+        await readAndWriteNewCabal(
+          fakeCabalPath,
+          versionPrefix + fakeNewVersion,
+        );
 
         const modifiedContents = await readFile(fakeCabalPath, "utf8");
 
-        expect(modifiedContents).toBeEqual("name: test-1-package\nversion: 0.0.0.7");
+        expect(modifiedContents).toBeEqual(
+          "name: test-1-package\nversion: 0.0.0.7",
+        );
       });
     });
   });
@@ -53,20 +60,30 @@ describe("readAndWriteNewCabal", () => {
 
     it("updates the version in the cabal file fixture when version is not semantic", async () => {
       const versionPrefix = "0.";
-      await readAndWriteNewCabal(fakeVersionCabalPath, versionPrefix + fakeNewVersion);
+      await readAndWriteNewCabal(
+        fakeVersionCabalPath,
+        versionPrefix + fakeNewVersion,
+      );
 
       const modifiedContents = await readFile(fakeVersionCabalPath, "utf8");
 
-      expect(modifiedContents).toBeEqual("cabal-version: 1.12\nversion: 0.0.0.7");
+      expect(modifiedContents).toBeEqual(
+        "cabal-version: 1.12\nversion: 0.0.0.7",
+      );
     });
   });
 });
 
 describe("VERSION_PATTERN", () => {
   it("matches a valid version of strings", () => {
-    const validStrings = ["version: 1.0.0", "   version: 2.3.4", "version: 3.0.0-alpha", "version: 4.2.0-beta.1"];
+    const validStrings = [
+      "version: 1.0.0",
+      "   version: 2.3.4",
+      "version: 3.0.0-alpha",
+      "version: 4.2.0-beta.1",
+    ];
 
-    validStrings.forEach(str => {
+    validStrings.forEach((str) => {
       const match = str.match(VERSION_PATTERN);
       expect(match).not.toBeNull();
       if (match && match[1]) {
@@ -76,18 +93,27 @@ describe("VERSION_PATTERN", () => {
   });
 
   it("does not match invalid version strings", () => {
-    const invalidStrings = ["version 1.0.0", "ver: 2.3.4", "version:", "version:"];
+    const invalidStrings = [
+      "version 1.0.0",
+      "ver: 2.3.4",
+      "version:",
+      "version:",
+    ];
 
-    invalidStrings.forEach(str => {
+    invalidStrings.forEach((str) => {
       const match = str.match(VERSION_PATTERN);
       expect(match).toBeNull();
     });
   });
 
   it("matches version strings with extra spaces", () => {
-    const validStrings = ["   version: 1.0.0", "\tversion: 2.3.4", " \t version: 3.0.0-alpha"];
+    const validStrings = [
+      "   version: 1.0.0",
+      "\tversion: 2.3.4",
+      " \t version: 3.0.0-alpha",
+    ];
 
-    validStrings.forEach(str => {
+    validStrings.forEach((str) => {
       const match = str.match(VERSION_PATTERN);
       expect(match).not.toBeNull();
       if (match && match[1]) {

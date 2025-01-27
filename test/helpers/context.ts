@@ -1,4 +1,7 @@
-import { VerifyConditionsContext, VerifyReleaseContext } from "semantic-release";
+import {
+  VerifyConditionsContext,
+  VerifyReleaseContext,
+} from "semantic-release";
 import Sinon from "sinon";
 
 const LoggerFake = {
