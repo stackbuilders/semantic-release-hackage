@@ -28,8 +28,10 @@
   },
   "packageManager": "yarn@4.0.2",
   "dependencies": {
+    "@types/yaml": "^1.9.7",
     "axios": "^1.6.7",
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "yaml": "^2.7.0"
   },
   "devDependencies": {
     "@assertive-ts/core": "^2.0.0",
