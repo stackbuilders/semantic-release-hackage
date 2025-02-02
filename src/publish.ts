@@ -3,13 +3,12 @@ import { PublishContext } from "semantic-release";
 import { PluginConfig } from "./types/pluginConfig";
 import { postPackage } from "./utils/hackage";
 import { PackageYaml } from "./utils/package";
-import { getHaskellVersion } from "./utils/version";
 
 import fs from "fs";
 
 export const publish = async (
-  { stripSuffix = false, workingDirectory, versionPrefix = "" }: PluginConfig,
-  { branch, logger, nextRelease }: PublishContext,
+  { workingDirectory }: PluginConfig,
+  { branch, logger }: PublishContext,
 ): Promise<void> => {
   if (workingDirectory) {
     logger.log("Changing directory to %s", workingDirectory);
@@ -18,11 +17,7 @@ export const publish = async (
 
   const packageYaml = new PackageYaml();
   const packageName = packageYaml.getName();
-  const packageVersion = getHaskellVersion(
-    nextRelease,
-    versionPrefix,
-    stripSuffix,
-  );
+  const packageVersion = packageYaml.getVersion();
 
   const sdist = `${packageName}-${packageVersion}.tar.gz`;
   const exists = fs.existsSync(sdist);
