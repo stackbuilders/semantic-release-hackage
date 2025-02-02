@@ -2,56 +2,32 @@ import { PrepareContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
 import { runExecCommand } from "./utils/exec";
-import { lookupCabalFilename } from "./utils/prepare";
-
-import fs from "fs";
-import { resolve } from "path";
-
-const VERSION_PATTERN = /^\s*version:\s+(\S+)/m;
-const VERSION_SUFFIX = /^([0-9]+\.[0-9]+\.[0-9]+).*$/;
-const PACKAGE_YAML = "package.yaml";
-
-function readAndWriteNewVersion(fullPath: string, newVersion: string): void {
-  const versionContents = fs.readFileSync(fullPath, "utf8");
-  const newContents = versionContents.replace(
-    VERSION_PATTERN,
-    `version: ${newVersion}`,
-  );
-  fs.writeFileSync(fullPath, newContents, "utf8");
-}
+import { PackageYaml } from "./utils/package";
+import { getHaskellVersion } from "./utils/version";
 
 export const prepare = async (
   {
-    cabalCmd = "cabal",
-    cabalFile,
-    sdistOptions = "",
     stripSuffix = false,
+    sdistOptions = "",
     versionPrefix = "",
+    workingDirectory,
   }: PluginConfig,
-  { nextRelease, logger, cwd }: PrepareContext,
+  { nextRelease, logger }: PrepareContext,
 ): Promise<void> => {
-  const realCwd = cwd ?? process.cwd();
-  const cabalFileName = cabalFile ?? lookupCabalFilename(realCwd, logger);
-  const { version: rawVersion } = nextRelease;
-  const version = stripSuffix
-    ? rawVersion.replace(VERSION_SUFFIX, "$1")
-    : rawVersion;
-  const fullPackageYaml = resolve(realCwd, PACKAGE_YAML);
-  const fullCabalPath = resolve(realCwd, cabalFileName);
-  const fullVersion = `${versionPrefix}${version}`;
-  const sdistCmd = `${cabalCmd} sdist ${sdistOptions}`;
-
-  if (fs.existsSync(PACKAGE_YAML)) {
-    // Update package.yaml if it exists
-    logger.log("Writing new version %s to `%s`", fullVersion, fullPackageYaml);
-    readAndWriteNewVersion(fullPackageYaml, fullVersion);
+  if (workingDirectory) {
+    logger.log("Changing directory to %s", workingDirectory);
+    process.chdir(workingDirectory);
   }
 
-  // Always update *.cabal
-  logger.log("Writing new version %s to `%s`", fullVersion, fullCabalPath);
-  readAndWriteNewVersion(fullCabalPath, fullVersion);
+  const version = getHaskellVersion(nextRelease, versionPrefix, stripSuffix);
+  const packageYaml = new PackageYaml();
+  const sdistCmd = `stack sdist ${sdistOptions}`;
 
-  logger.log(`Running ${sdistCmd}`);
+  logger.log("Setting package version to %s", version);
+  packageYaml.setVersion(version);
+  packageYaml.write();
+
+  logger.log("Running %s", sdistCmd);
   const { warn, output } = await runExecCommand(sdistCmd);
 
   if (warn) {
