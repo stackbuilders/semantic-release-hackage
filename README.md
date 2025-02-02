@@ -119,7 +119,9 @@ Required: `false`
 
 Description: This is a version prefix created for supporting PVP versioning.
 
-Default: `""`
+Default: If your current `package.yaml` version matches `{prefix}{semver}` then
+`prefix` will be used. For example, `version: 0.0.0.0` will mean `"0." is used`
+as `versionPrefix`. Otherwise, the default is `""`.
 
 ### _workingDirectory_
 

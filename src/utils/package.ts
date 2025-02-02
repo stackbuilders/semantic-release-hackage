@@ -1,13 +1,11 @@
 import YAML from "yaml";
 
+import { HasVersion, getVersionPrefix } from "./version";
+
 import fs from "fs";
 
 interface HasName {
   name: string;
-}
-
-interface HasVersion {
-  version: string;
 }
 
 type PackageYamlData = object & HasName & HasVersion;
@@ -32,6 +30,10 @@ export class PackageYaml {
   public setVersion(version: string): PackageYaml {
     this.data.version = version;
     return this;
+  }
+
+  public inferVersionPrefix(): string | null {
+    return getVersionPrefix(this.data);
   }
 
   public write(path?: string): PackageYaml {

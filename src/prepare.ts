@@ -9,7 +9,7 @@ export const prepare = async (
   {
     stripSuffix = false,
     sdistOptions = "",
-    versionPrefix = "",
+    versionPrefix,
     workingDirectory,
   }: PluginConfig,
   { nextRelease, logger }: PrepareContext,
@@ -19,8 +19,12 @@ export const prepare = async (
     process.chdir(workingDirectory);
   }
 
-  const version = getHaskellVersion(nextRelease, versionPrefix, stripSuffix);
   const packageYaml = new PackageYaml();
+  const version = getHaskellVersion(
+    nextRelease,
+    versionPrefix ?? packageYaml.inferVersionPrefix() ?? "",
+    stripSuffix,
+  );
   const sdistCmd = `stack sdist ${sdistOptions} --tar-dir .`;
 
   logger.log("Setting package version to %s", version);

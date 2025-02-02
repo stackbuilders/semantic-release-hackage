@@ -26,4 +26,10 @@ describe("PackageYaml", () => {
     packageYaml2.setVersion(originalVersion);
     packageYaml2.write();
   });
+
+  it("can infer a version prefix", () => {
+    const packageYaml = new PackageYaml("test/fixtures/test-package.yaml");
+
+    expect(packageYaml.inferVersionPrefix()).toBeEqual("0.");
+  });
 });
