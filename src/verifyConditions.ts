@@ -1,7 +1,6 @@
 import { BaseContext } from "semantic-release";
 
 import { PluginConfig } from "./types/pluginConfig";
-import { EnvVarError } from "./utils/EnvVarError";
 
 export const verifyConditions = (
   _pluginConfig: PluginConfig,
@@ -9,9 +8,8 @@ export const verifyConditions = (
 ): void => {
   const { HACKAGE_TOKEN } = process.env;
 
-  logger.log("Checking environment variables");
   if (!HACKAGE_TOKEN) {
-    throw new EnvVarError("HACKAGE_TOKEN");
+    throw new Error("HACKAGE_TOKEN must be set in the environment");
   }
 
   logger.success("Verify conditions done!");
