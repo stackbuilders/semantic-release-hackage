@@ -21,7 +21,7 @@ export const prepare = async (
 
   const version = getHaskellVersion(nextRelease, versionPrefix, stripSuffix);
   const packageYaml = new PackageYaml();
-  const sdistCmd = `stack sdist ${sdistOptions}`;
+  const sdistCmd = `stack sdist ${sdistOptions} --tar-dir .`;
 
   logger.log("Setting package version to %s", version);
   packageYaml.setVersion(version);
