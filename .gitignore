@@ -21,3 +21,6 @@ local.properties
 
 # Packages
 *.tgz
+
+# asdf
+.tool-versions
